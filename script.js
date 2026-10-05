@@ -63,9 +63,9 @@ function bindToggle(btn, target) {
   });
 }
 
-/* ── Experience / Education card toggles ─────────────────────── */
+/* ── Experience / Education / In the Room card toggles ────────── */
 document.querySelectorAll('.card-toggle-btn').forEach(btn => {
-  const body = btn.closest('.timeline-card').querySelector('.collapsible-body');
+  const body = btn.closest('.timeline-card, .itr-card').querySelector('.collapsible-body');
   if (body) bindToggle(btn, body);
 });
 
