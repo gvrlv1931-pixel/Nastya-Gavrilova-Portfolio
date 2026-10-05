@@ -734,6 +734,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 }
 
 .itr-title-row .itr-role { margin-bottom: 0; }
+.itr-title-row .card-toggle-btn { margin-block: -0.15rem; }
 
 
 
