@@ -31,10 +31,10 @@ navLinks.querySelectorAll('a').forEach(a => {
 
 /* ── Hero role typewriter ────────────────────────────────────── */
 const roles = [
+  'Circular Economy Builder',
+  'Culture Change Partner',
   'Social Entrepreneur',
   'Environmental Systems Innovator',
-  'Circular Economy Builder',
-  'Problem Solver',
   'People and Planet Professional',
 ];
 
@@ -94,15 +94,27 @@ document.querySelectorAll('.cs-card').forEach(card => {
 });
 
 // Links like /#case-coffee open that case study and scroll to it
-function openCaseFromHash(smooth) {
-  const id   = decodeURIComponent(location.hash.slice(1));
+function openCase(id, smooth) {
   const card = id ? document.getElementById(id) : null;
-  if (!card || !card.classList.contains('cs-card')) return;
+  if (!card || !card.classList.contains('cs-card')) return false;
   setCaseStudy(card, true);
   card.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+  return true;
 }
-window.addEventListener('load', () => openCaseFromHash(false));
-window.addEventListener('hashchange', () => openCaseFromHash(true));
+const hashId = () => decodeURIComponent(location.hash.slice(1));
+window.addEventListener('load', () => openCase(hashId(), false));
+window.addEventListener('hashchange', () => openCase(hashId(), true));
+
+// In-page "case study" links work even when the hash is already set
+document.addEventListener('click', e => {
+  const link = e.target.closest('a[href^="#case-"]');
+  if (!link) return;
+  const id = link.getAttribute('href').slice(1);
+  if (openCase(id, true)) {
+    e.preventDefault();
+    history.pushState(null, '', '#' + id);
+  }
+});
 
 /* ── Generic next-sibling collapse (modules, year blocks) ───── */
 document.querySelectorAll('.modules-toggle, .year-toggle').forEach(btn => {

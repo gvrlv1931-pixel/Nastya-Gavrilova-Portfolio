@@ -798,10 +798,13 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   border: 1.5px solid var(--c-accent);
 }
 
-.cs-status--dev {
+.cs-status--dev,
+.cs-status--muted {
   background: var(--c-surface);
   border: 1.5px dashed var(--c-text);
 }
+
+.cs-status--muted { border-style: solid; border-color: var(--c-border); color: var(--c-text-muted); }
 
 .cs-title {
   font-size: clamp(1.2rem, 2.6vw, 1.45rem);
@@ -1284,6 +1287,8 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   font-size: 0.95rem;
   transition: border-color var(--transition), box-shadow var(--transition);
   resize: vertical;
+  width: 100%;
+  min-width: 0;
 }
 
 .form-group input::placeholder,
@@ -1337,7 +1342,8 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 }
 
 .contact-link-label { display: block; font-size: 0.78rem; color: var(--c-text-muted); font-weight: 500; }
-.contact-link-value { display: block; font-size: 0.9rem; font-weight: 600; color: var(--c-text); }
+.contact-link-value { display: block; font-size: 0.9rem; font-weight: 600; color: var(--c-text); overflow-wrap: anywhere; }
+.contact-link > div { min-width: 0; }
 
 /* ── Footer ──────────────────────────────────────────────────── */
 .footer {
@@ -1371,12 +1377,18 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* ── Responsive ──────────────────────────────────────────────── */
+/* Stats: equal columns so labels wrap instead of overflowing on smaller laptops */
+@media (max-width: 1100px) {
+  .stats-row  { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s2); }
+  .stat-label { text-align: center; }
+}
+
 @media (max-width: 900px) {
   .hero-inner    { grid-template-columns: 1fr; }
   .hero-visual   { display: none; }
   .about-grid    { grid-template-columns: 1fr; }
-  .edu-container { grid-template-columns: 1fr; gap: var(--s6); }
-  .contact-grid  { grid-template-columns: 1fr; }
+  .edu-container { grid-template-columns: minmax(0, 1fr); gap: var(--s6); }
+  .contact-grid  { grid-template-columns: minmax(0, 1fr); }
   .contact-links { min-width: unset; flex-direction: row; flex-wrap: wrap; }
   .cs-grid       { grid-template-columns: 1fr; }
   .nav-links     { gap: 0.75rem; font-size: 0.85rem; }
@@ -1405,10 +1417,13 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   .timeline-dot  { display: none; }
   .projects-grid { grid-template-columns: 1fr; }
   .itr-grid      { grid-template-columns: 1fr; grid-auto-flow: row; }
-  .skills-grid   { grid-template-columns: 1fr 1fr; }
   .footer-inner  { flex-direction: column; gap: var(--s2); text-align: center; }
-  .stats-row     { gap: var(--s2); flex-wrap: wrap; }
+  .stats-row     { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--s3); }
   .cs-card       { padding: var(--s3); }
+  .about-facts li { flex-direction: column; gap: 2px; }
+  .timeline-header { flex-direction: column-reverse; align-items: stretch; gap: 0.6rem; }
+  .timeline-header-right { justify-content: space-between; }
+  .fact-value    { text-align: left; }
   .cs-flow-chip  { white-space: normal; }
   .cs-flow,
   .cs-flow li    { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
