@@ -75,6 +75,35 @@ document.querySelectorAll('.project-expand-btn').forEach(btn => {
   if (details) bindToggle(btn, details);
 });
 
+/* ── Case studies: expand, label swap, deep links ────────────── */
+function setCaseStudy(card, open) {
+  const btn  = card.querySelector('.cs-expand-btn');
+  const body = card.querySelector('.cs-body');
+  if (!btn || !body) return;
+  body.classList.toggle('collapsed', !open);
+  btn.setAttribute('aria-expanded', String(open));
+  const label = btn.querySelector('.cs-expand-label');
+  if (label) label.textContent = open ? 'Hide case study' : 'Read the case study';
+}
+
+document.querySelectorAll('.cs-card').forEach(card => {
+  const btn = card.querySelector('.cs-expand-btn');
+  if (btn) btn.addEventListener('click', () => {
+    setCaseStudy(card, btn.getAttribute('aria-expanded') !== 'true');
+  });
+});
+
+// Links like /#case-coffee open that case study and scroll to it
+function openCaseFromHash(smooth) {
+  const id   = decodeURIComponent(location.hash.slice(1));
+  const card = id ? document.getElementById(id) : null;
+  if (!card || !card.classList.contains('cs-card')) return;
+  setCaseStudy(card, true);
+  card.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+}
+window.addEventListener('load', () => openCaseFromHash(false));
+window.addEventListener('hashchange', () => openCaseFromHash(true));
+
 /* ── Generic next-sibling collapse (modules, year blocks) ───── */
 document.querySelectorAll('.modules-toggle, .year-toggle').forEach(btn => {
   const target = btn.nextElementSibling;
@@ -137,7 +166,7 @@ const revealObs = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.1 });
 
-document.querySelectorAll('.timeline-card, .project-card, .skill-group, .cert-card, .itr-card, .about-facts, .about-body').forEach((el, i) => {
+document.querySelectorAll('.timeline-card, .cs-card, .project-card, .skill-group, .cert-card, .itr-card, .about-facts, .about-body').forEach((el, i) => {
   el.classList.add('reveal');
   el.style.transitionDelay = (i % 4) * 55 + 'ms';
   revealObs.observe(el);
